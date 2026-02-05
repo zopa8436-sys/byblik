@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="App.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Infrastructure</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Infrastructure\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuItem.cpp">
+      <Filter>Infrastructure\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFactory.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Store.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Infrastructure</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Infrastructure</Filter>
+    </ClInclude>
+    <ClInclude Include="FKeys.h">
+      <Filter>Infrastructure</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Infrastructure\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuItem.h">
+      <Filter>Infrastructure\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>Infrastructure\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="Palette.h">
+      <Filter>Infrastructure\Colors</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFactory.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Store.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="App">
+      <UniqueIdentifier>{55d38492-99af-4e5e-8955-30ffebce546e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{86fa3d83-5708-4082-8fa3-8ea67f6a1b73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Infrastructure">
+      <UniqueIdentifier>{ff134c8c-b07c-46fc-9705-00f26ef518ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Infrastructure\Menu">
+      <UniqueIdentifier>{4df4d37e-fb79-4445-8154-c15708c166b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Infrastructure\Colors">
+      <UniqueIdentifier>{33d7d925-65c6-488d-8342-cbf653860611}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

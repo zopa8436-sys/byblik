@@ -1,0 +1,98 @@
+// Store.cpp
+#include "pch.h"
+#include "Store.h"
+#include "GameFactory.h"
+#include "Utils.h"
+#include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
+#include <cctype>
+
+string trim(const string& str) {
+    size_t start = 0;
+    while (start < str.size() && isspace(static_cast<unsigned char>(str[start]))) ++start;
+    size_t end = str.size();
+    while (end > start && isspace(static_cast<unsigned char>(str[end-1]))) --end;
+    return str.substr(start, end - start);
+}
+
+Game parseGameLine(const string& line) {
+    istringstream iss(line);
+    string field;
+    vector<string> fields;
+    while (getline(iss, field, ';')) {
+        fields.push_back(trim(field));
+    }
+    if (fields.size() != 11) {
+        throw runtime_error("CSV: неверный формат строки игры");
+    }
+    int id          = atoi(fields[0].c_str());
+    string title    = fields[1];
+    string os       = fields[2];
+    int year        = atoi(fields[3].c_str());
+    string genre    = fields[4];
+    string publisher = fields[5];
+    string developer = fields[6];
+    int sold        = atoi(fields[7].c_str());
+    bool multi      = (fields[8] == "Multiplayer");
+    string age      = fields[9];
+    double priceD   = atof(fields[10].c_str());
+    int priceCents  = static_cast<int>(priceD * 100);
+
+    return Game(id, title, os, year, genre, publisher, developer, sold, multi, age, priceCents);
+}
+
+// ====================================================
+
+Store::Store() : name_("Game Store"), address_("г. Москва, ул. Ленина, д. 10") {}
+
+Store::Store(const string& filename) : name_("Game Store"), address_("г. Москва, ул. Ленина, д. 10") {
+    if (!loadFromCSV(filename)) {
+        games_ = GameFactory::createVector(12);
+        saveToCSV(filename);
+    }
+}
+
+// ... (все остальные методы без изменений: addGame, editGame, removeGame, сортировки, find*, print)
+
+bool Store::loadFromCSV(const string& filename) {
+    if (filename.empty()) return false;
+
+    ifstream in(filename);
+    if (!in.is_open()) return false;
+
+    string line;
+    if (!getline(in, line)) { in.close(); return false; }
+
+    // первая строка: название;адрес
+    istringstream iss(line);
+    getline(iss, name_, ';');
+    getline(iss, address_);
+
+    games_.clear();
+
+    while (getline(in, line)) {
+        if (line.empty()) continue;
+        try {
+            games_.push_back(parseGameLine(line));
+        } catch (...) {
+            // пропускаем битые строки
+        }
+    }
+    in.close();
+    return !games_.empty();
+}
+
+void Store::saveToCSV(const string& filename) const {
+    ofstream file(filename);
+    if (!file) throw runtime_error("Не удалось открыть файл для записи");
+
+    file << name_ << ";" << address_ << "\n";
+    for (const auto& g : games_) {
+        file << g.id() << ";" << g.title() << ";" << g.os() << ";" << g.year() << ";" << g.genre() << ";"
+             << g.publisher() << ";" << g.developer() << ";" << g.soldCopies() << ";"
+             << (g.multiplayer() ? "Multiplayer" : "Singleplayer") << ";"
+             << g.ageCategory() << ";" << (g.price() / 100.0) << "\n";
+    }
+}
