@@ -7,69 +7,70 @@
 #include <iomanip>
 #include <sstream>
 #include <cstdlib>
+#include <cmath>
 
-// Конструктор по умолчанию с базовыми значениями названия и адреса магазина
-Store::Store() : name_("Game Store"), address_("г. Москва, ул. Ленина, д. 10") {}
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+Store::Store() : name_("Game Store"), address_("пїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ. 10") {}
 
-// Конструктор с загрузкой данных из CSV файла
-Store::Store(const string& filename) : name_("Game Store"), address_("г. Москва, ул. Ленина, д. 10") {
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ CSV пїЅпїЅпїЅпїЅпїЅ
+Store::Store(const string& filename) : name_("Game Store"), address_("пїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ. 10") {
     if (!loadFromCSV(filename)) {
-        // При неудачной загрузке создается новая коллекция с помощью фабрики
+        // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         games_ = GameFactory::createVector(12);
-        saveToCSV(filename);  // Попытка сохранения
+        saveToCSV(filename);  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     }
 }
 
-// Геттеры для доступа к приватным полям класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 const string& Store::name() const { return name_; }
 const string& Store::address() const { return address_; }
 const vector<Game>& Store::games() const { return games_; }
 
-// Добавление новой игры в коллекцию магазина
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::addGame(const Game& game) {
-    games_.push_back(game);  // Добавление игры в конец вектора
+    games_.push_back(game);  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 }
 
-// Редактирование существующей игры по её идентификатору
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::editGame(int id) {
     auto it = find_if(games_.begin(), games_.end(), [id](const Game& g) { return g.id() == id; });
     if (it == games_.end()) {
-        throw runtime_error("Игра с таким ID не найдена");
+        throw runtime_error("пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ ID пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
     }
-    // Замена найденной игры на новую с тем же ID
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ ID
     Game newGame = GameFactory::create(id);
     *it = newGame;
 }
 
-// Удаление игры из коллекции по её идентификатору
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::removeGame(int id) {
     auto it = remove_if(games_.begin(), games_.end(), [id](const Game& g) { return g.id() == id; });
     if (it != games_.end()) {
-        games_.erase(it, games_.end());  // Удаление перемещённых элементов
+        games_.erase(it, games_.end());  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     }
 }
 
-// Сортировка коллекции игр по возрастанию идентификатора
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::sortById() {
     sort(games_.begin(), games_.end(), [](const Game& a, const Game& b) { return a.id() < b.id(); });
 }
 
-// Сортировка коллекции игр по убыванию года выпуска
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::sortByYearDesc() {
     sort(games_.begin(), games_.end(), [](const Game& a, const Game& b) { return a.year() > b.year(); });
 }
 
-// Сортировка коллекции игр по возрастанию цены
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 void Store::sortByPriceAsc() {
     sort(games_.begin(), games_.end(), [](const Game& a, const Game& b) { return a.price() < b.price(); });
 }
 
-// Сортировка коллекции игр по убыванию количества проданных копий
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 void Store::sortBySoldDesc() {
     sort(games_.begin(), games_.end(), [](const Game& a, const Game& b) { return a.soldCopies() > b.soldCopies(); });
 }
 
-// Поиск игр по диапазону цен
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
 vector<Game> Store::findByPriceRange(int minPrice, int maxPrice) const {
     vector<Game> result;
     copy_if(games_.begin(), games_.end(), back_inserter(result),
@@ -77,7 +78,7 @@ vector<Game> Store::findByPriceRange(int minPrice, int maxPrice) const {
     return result;
 }
 
-// Поиск игр по году выпуска
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 vector<Game> Store::findByYear(int year) const {
     vector<Game> result;
     copy_if(games_.begin(), games_.end(), back_inserter(result),
@@ -85,7 +86,7 @@ vector<Game> Store::findByYear(int year) const {
     return result;
 }
 
-// Поиск игр по операционной системе
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 vector<Game> Store::findByOs(const string& os) const {
     vector<Game> result;
     copy_if(games_.begin(), games_.end(), back_inserter(result),
@@ -93,9 +94,9 @@ vector<Game> Store::findByOs(const string& os) const {
     return result;
 }
 
-// Вывод информации о магазине и его коллекции
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void Store::print(ostream& os) const {
-    os << "Магазин: " << name_ << ", Адрес: " << address_ << "\n";
+    os << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " << name_ << ", пїЅпїЅпїЅпїЅпїЅ: " << address_ << "\n";
     os << Game::header();
     int row = 1;
     for (const auto& game : games_) {
@@ -104,68 +105,95 @@ void Store::print(ostream& os) const {
     os << Game::footer();
 }
 
-// Загрузка данных из CSV файла
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ CSV пїЅпїЅпїЅпїЅпїЅ
 bool Store::loadFromCSV(const string& filename) {
+    // Р‘Р°Р·РѕРІР°СЏ РїСЂРѕРІРµСЂРєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°
     ifstream file(filename);
     if (!file.is_open()) {
         return false;
     }
 
+    // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РїР°СЂСЃРµСЂ СЃС‚СЂРѕРєРё CSV СЃ СѓС‡РµС‚РѕРј РєР°РІС‹С‡РµРє Рё СЌРєСЂР°РЅРёСЂРѕРІР°РЅРёСЏ ""
+    auto splitCSV = [](const string& line) {
+        vector<string> fields;
+        string cur;
+        bool inQuotes = false;
+        for (size_t i = 0; i < line.size(); ++i) {
+            char c = line[i];
+            if (c == '"') {
+                if (inQuotes && i + 1 < line.size() && line[i + 1] == '"') {
+                    cur.push_back('"');
+                    ++i; // РїСЂРѕРїСѓСЃРєР°РµРј СЌРєСЂР°РЅРёСЂРѕРІР°РЅРЅСѓСЋ РєР°РІС‹С‡РєСѓ
+                }
+                else {
+                    inQuotes = !inQuotes;
+                }
+            }
+            else if (c == ';' && !inQuotes) {
+                fields.push_back(cur);
+                cur.clear();
+            }
+            else {
+                cur.push_back(c);
+            }
+        }
+        fields.push_back(cur);
+        return fields;
+    };
+
     string line;
+    // Р§РёС‚Р°РµРј Р·Р°РіРѕР»РѕРІРѕРє (РёРјСЏ РјР°РіР°Р·РёРЅР° Рё Р°РґСЂРµСЃ)
     if (!getline(file, line)) {
         file.close();
         return false;
     }
+    auto header = splitCSV(line);
+    if (header.size() >= 1) name_ = header[0];
+    if (header.size() >= 2) address_ = header[1];
 
-    istringstream iss(line);
-    getline(iss, name_, ';');
-    getline(iss, address_, ';');
     games_.clear();
 
     while (getline(file, line)) {
-        istringstream iss(line);
-        string token;
-        int id, year;
-        int soldCopies;
-        double priceDouble;
-        string title, os, genre, publisher, developer, players, ageCategory;
-
-        if (!getline(iss, token, ';')) continue;
-        id = atoi(token.c_str());
-        getline(iss, title, ';');
-        getline(iss, os, ';');
-        getline(iss, token, ';'); year = atoi(token.c_str());
-        getline(iss, genre, ';');
-        getline(iss, publisher, ';');
-        getline(iss, developer, ';');
-        getline(iss, token, ';'); soldCopies = atoi(token.c_str());
-        getline(iss, players, ';');
-        getline(iss, ageCategory, ';');
-        getline(iss, token, ';'); priceDouble = atof(token.c_str());
-
-        int priceCents = static_cast<int>(priceDouble * 100);
-        bool multiplayer = (players == "Multiplayer");
-
+        if (line.empty()) continue;
+        auto f = splitCSV(line);
+        // РћР¶РёРґР°РµРј 11 РїРѕР»РµР№: id,title,os,year,genre,publisher,developer,soldCopies,players,ageCategory,price
+        if (f.size() < 11) continue;
         try {
+            int id = stoi(f[0]);
+            string title = f[1];
+            string os = f[2];
+            int year = stoi(f[3]);
+            string genre = f[4];
+            string publisher = f[5];
+            string developer = f[6];
+            int soldCopies = stoi(f[7]);
+            string players = f[8];
+            string ageCategory = f[9];
+            double priceDouble = stod(f[10]);
+
+            int priceCents = static_cast<int>(std::lround(priceDouble * 100.0));
+            bool multiplayer = (players == "Multiplayer");
+
             games_.emplace_back(id, title, os, year, genre, publisher, developer, soldCopies, multiplayer, ageCategory, priceCents);
         }
         catch (...) {
-            // Игнор ошибок
+            // РРіРЅРѕСЂРёСЂСѓРµРј РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ СЃС‚СЂРѕРєРё, РїСЂРѕРґРѕР»Р¶Р°РµРј С‡РёС‚Р°С‚СЊ РѕСЃС‚Р°Р»СЊРЅС‹Рµ
+            continue;
         }
     }
     file.close();
     return true;
 }
 
-// Сохранение данных магазина в CSV файл
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ CSV пїЅпїЅпїЅпїЅ
 void Store::saveToCSV(const string& filename) const {
     ofstream file(filename);
     if (!file) {
-        throw runtime_error("Ошибка открытия файла для записи");
+        throw runtime_error("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
     }
-    // Запись информации о магазине
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     file << name_ << ";" << address_ << "\n";
-    // Запись данных об играх
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     for (const auto& game : games_) {
         file << game.id() << ";" << game.title() << ";" << game.os() << ";" << game.year() << ";" << game.genre() << ";"
             << game.publisher() << ";" << game.developer() << ";" << game.soldCopies() << ";" << (game.multiplayer() ? "Multiplayer" : "Singleplayer") << ";"
